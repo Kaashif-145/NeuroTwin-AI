@@ -35,6 +35,58 @@ def inject_custom_css():
     """, unsafe_allow_html=True)
 
 
+def inject_pwa_meta():
+    """Injects PWA and Mobile-specific meta tags to allow 'Add to Home Screen' functionality."""
+    st.markdown("""
+        <script>
+            // Create a dynamic PWA manifest
+            const manifest = {
+                "name": "NeuroTwin AI Platform",
+                "short_name": "NeuroTwin",
+                "description": "The Future of Academic Intelligence",
+                "start_url": ".",
+                "display": "standalone",
+                "background_color": "#0E1117",
+                "theme_color": "#6C5CE7",
+                "orientation": "portrait",
+                "icons": [
+                    {
+                        "src": "https://cdn-icons-png.flaticon.com/512/2103/2103633.png",
+                        "sizes": "512x512",
+                        "type": "image/png",
+                        "purpose": "any maskable"
+                    }
+                ]
+            };
+            
+            const stringManifest = JSON.stringify(manifest);
+            const blob = new Blob([stringManifest], {type: 'application/json'});
+            const manifestURL = URL.createObjectURL(blob);
+            
+            const link = document.createElement('link');
+            link.rel = 'manifest';
+            link.href = manifestURL;
+            document.head.appendChild(link);
+
+            // Apple iOS specific tags
+            const metaApple = document.createElement('meta');
+            metaApple.name = 'apple-mobile-web-app-capable';
+            metaApple.content = 'yes';
+            document.head.appendChild(metaApple);
+
+            const metaStatus = document.createElement('meta');
+            metaStatus.name = 'apple-mobile-web-app-status-bar-style';
+            metaStatus.content = 'black-translucent';
+            document.head.appendChild(metaStatus);
+            
+            const metaTitle = document.createElement('meta');
+            metaTitle.name = 'apple-mobile-web-app-title';
+            metaTitle.content = 'NeuroTwin';
+            document.head.appendChild(metaTitle);
+        </script>
+    """, unsafe_allow_html=True)
+
+
 def set_page_config(title="NeuroTwin AI", icon="🧪", show_header=False):
     try:
         st.set_page_config(
@@ -48,6 +100,7 @@ def set_page_config(title="NeuroTwin AI", icon="🧪", show_header=False):
         pass
         
     inject_custom_css()
+    inject_pwa_meta()
     
     # Use a session state flag that we'll check, but we need to reset it 
     # at the start of the main app.py run.

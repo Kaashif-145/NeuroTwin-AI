@@ -150,7 +150,6 @@ def show_login():
                             st.error("This email is already registered. Please sign in.")
                         elif reg_pass == reg_confirm:
                             save_user(reg_email, reg_pass)
-                            save_remembered_user(reg_email) # Remember newly registered user
                             st.success("Account created! Please sign in now.")
                             st.balloons()
                             time.sleep(1)
