@@ -1,0 +1,60 @@
+# ============================================================
+#  NeuroTwin AI — .gitignore
+# ============================================================
+
+# ---- SECRETS (NEVER commit these) ----
+.env
+*.env
+firebase_config.json
+database/firebase_config.json
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ---- Virtual environments ----
+.venv/
+venv/
+env/
+ENV/
+
+# ---- ML Model cache (large files – re-downloaded at runtime) ----
+*.bin
+*.safetensors
+*.pt
+*.pth
+model_training/*.pkl
+model_training/*.model
+
+# ---- App generated outputs ----
+data/
+*.pdf
+*.pptx
+
+# ---- Database (local state only) ----
+database/sqlite.db
+database/profiles.json
+database/upload_history.json
+
+# ---- IDE / OS ----
+.vscode/
+.idea/
+*.code-workspace
+.DS_Store
+Thumbs.db
+*.swp
+
+# ---- Notebooks checkpoints ----
+notebooks/.ipynb_checkpoints/
+.ipynb_checkpoints/
+
+# ---- Gemini / Antigravity tool ----
+.gemini/
+scratch/

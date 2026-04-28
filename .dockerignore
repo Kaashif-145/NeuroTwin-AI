@@ -1,0 +1,46 @@
+# Python virtual environment (use pip install from requirements.txt instead)
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Development tools
+.git/
+.gitignore
+.gemini/
+notebooks/
+scratch/
+workflow_diagram/
+
+# Local dev scripts
+run_project.ps1
+run_project.sh
+
+# IDE configs
+.vscode/
+.idea/
+*.code-workspace
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test artifacts
+*.test.py
+tests/
+
+# Large model cache (models download at runtime into container)
+# Remove this line if you want to bake models into the image (much larger image)
+model_training/
+
+# Temp data outputs (will be mounted as a volume anyway)
+data/

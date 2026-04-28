@@ -1,0 +1,60 @@
+# ============================================================
+#  NeuroTwin AI — Docker Compose
+#  Services: Streamlit app + FastAPI backend (optional)
+# ============================================================
+
+version: "3.9"
+
+services:
+
+  # ----------------------------------------------------------
+  #  Streamlit Frontend (main app)
+  # ----------------------------------------------------------
+  neurotwin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: neurotwin_app
+    image: neurotwin-ai:latest
+    ports:
+      - "8501:8501"         # Access at http://localhost:8501
+    env_file:
+      - .env                # Loads GEMINI_API_KEY, GEMINI_API_KEY_2, etc.
+    volumes:
+      - ./data:/app/data                   # Generated PDFs / outputs
+      - ./database:/app/database           # SQLite db + JSON profiles
+      - ./model_training:/app/model_training
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ----------------------------------------------------------
+  #  FastAPI Backend (optional — only if you use API routes)
+  # ----------------------------------------------------------
+  neurotwin_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: neurotwin_api
+    command: ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    ports:
+      - "8000:8000"         # API docs at http://localhost:8000/docs
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      - ./database:/app/database
+    restart: unless-stopped
+    depends_on:
+      - neurotwin
+
+# ----------------------------------------------------------
+#  Named volumes (persistent data across rebuilds)
+# ----------------------------------------------------------
+volumes:
+  data:
+  database:
