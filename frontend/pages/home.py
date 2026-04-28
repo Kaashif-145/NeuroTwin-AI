@@ -14,7 +14,8 @@ from frontend.utils.i18n import _t
 import datetime
 
 def get_greeting_key():
-    hour = datetime.datetime.now().hour
+    india_tz = datetime.timezone(datetime.timedelta(hours=5, minutes=30))
+    hour = datetime.datetime.now(india_tz).hour
     if hour < 12: return "greeting_morning"
     elif hour < 17: return "greeting_afternoon"
     else: return "greeting_evening"
@@ -34,7 +35,7 @@ def show_home():
                     padding: 50px; border-radius: 30px; color: white; margin-bottom: 35px;
                     border: 1px solid rgba(255,255,255,0.05);
                     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);">
-            <div style="display: inline-block; background: #0052FF; color: white; padding: 4px 12px; 
+            <div id="neurotwin-greeting-badge" style="display: inline-block; background: #0052FF; color: white; padding: 4px 12px; 
                         border-radius: 4px; font-weight: 700; font-size: 0.75rem; margin-bottom: 15px; 
                         letter-spacing: 1px; text-transform: uppercase;">
                 {greeting}
@@ -47,6 +48,18 @@ def show_home():
                 {_t('home_subtitle')}
             </p>
         </div>
+        <script>
+            const updateGreetingLabel = () => {{
+                const hour = new Date().getHours();
+                let text = "Good Evening";
+                if (hour < 12) text = "Good Morning";
+                else if (hour < 17) text = "Good Afternoon";
+                const badge = document.getElementById("neurotwin-greeting-badge");
+                if (badge) badge.innerText = text;
+            }};
+            updateGreetingLabel();
+            setInterval(updateGreetingLabel, 60000);
+        </script>
     """, unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns(3)
