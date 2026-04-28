@@ -45,28 +45,6 @@ NeuroTwin AI is a high-fidelity, AI-powered learning ecosystem designed to revol
 - Python 3.9+ (Python 3.10 recommended)
 - Streamlit
 
-### Installation & Run
-
-1. **Clone and Enter**:
-   ```bash
-   git clone https://github.com/your-repo/neurotwin-ai.git
-   cd neurotwin-ai
-   ```
-
-2. **Setup Environment**:
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # Or .\.venv\Scripts\activate on Windows
-   pip install -r requirements.txt
-   ```
-
-3. **Launch the Intelligence**:
-   ```bash
-   streamlit run frontend/app.py
-   ```
-
----
-
 ## 🛠️ Project Architecture
 
 - **`frontend/`**: The visual core of NeuroTwin.
