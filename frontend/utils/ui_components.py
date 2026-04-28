@@ -51,7 +51,7 @@ def inject_pwa_meta():
                 "orientation": "portrait",
                 "icons": [
                     {
-                        "src": "https://cdn-icons-png.flaticon.com/512/2103/2103633.png",
+                        "src": "https://raw.githubusercontent.com/Kaashif-145/NeuroTwin-AI/main/icon.png",
                         "sizes": "512x512",
                         "type": "image/png",
                         "purpose": "any maskable"
