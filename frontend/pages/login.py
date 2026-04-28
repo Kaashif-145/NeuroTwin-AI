@@ -65,7 +65,8 @@ def run_cloudflare_verification():
 import datetime
 
 def get_greeting():
-    hour = datetime.datetime.now().hour
+    india_tz = datetime.timezone(datetime.timedelta(hours=5, minutes=30))
+    hour = datetime.datetime.now(india_tz).hour
     if hour < 12: return "Good Morning"
     elif hour < 17: return "Good Afternoon"
     else: return "Good Evening"
@@ -91,7 +92,7 @@ def show_login():
     with col2:
         st.markdown(f"""
             <div style="text-align: center; padding: 20px 0;">
-                <p style="color: #FF0080; font-weight: 600; letter-spacing: 2px; margin-bottom: 5px;">{greeting.upper()}</p>
+                <p id="login-greeting-text" style="color: #FF0080; font-weight: 600; letter-spacing: 2px; margin-bottom: 5px;">{greeting.upper()}</p>
                 <h1 style="font-family: 'Outfit'; font-weight: 900; font-size: 3.5rem; margin: 0; line-height: 1.1;">
                     <span style="background: linear-gradient(to right, #FF0080, #7928CA, #00DFD8); 
                                  -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
@@ -100,6 +101,18 @@ def show_login():
                 </h1>
                 <p style="color: #888; font-size: 1rem; margin-top: 10px;">The Future of Academic Intelligence</p>
             </div>
+            <script>
+                const updateLoginGreeting = () => {{
+                    const hour = new Date().getHours();
+                    let text = "GOOD EVENING";
+                    if (hour < 12) text = "GOOD MORNING";
+                    else if (hour < 17) text = "GOOD AFTERNOON";
+                    const greetingElement = document.getElementById("login-greeting-text");
+                    if (greetingElement) greetingElement.innerText = text;
+                }};
+                updateLoginGreeting();
+                setInterval(updateLoginGreeting, 60000);
+            </script>
         """, unsafe_allow_html=True)
         
         if not st.session_state.otp_sent:
