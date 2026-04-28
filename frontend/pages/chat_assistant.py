@@ -70,7 +70,7 @@ def show_chat_assistant():
                     system_prefix=full_system_prompt
                 )
                 response_placeholder.markdown(response_text)
-                save_user_memory(user_email, f"User: {prompt[:50]}. AI: {response_text[:100]}...")
+                save_user_memory(user_email, f"User: {prompt}. AI: {response_text}")
                 st.session_state.messages.append({"role": "assistant", "content": response_text})
             
             except Exception as e:
