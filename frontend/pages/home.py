@@ -23,8 +23,8 @@ def get_greeting_key():
 def show_home():
     # Welcome Banner logic
     email = st.session_state.get('user_email', 'Student')
-    # Treat both the specific email and any 'verified_user' placeholder as Admin
-    is_admin = email == "mattokaasif145@gmail.com" or "verified_user" in email.lower()
+    # Treat specific emails as Admin
+    is_admin = email.lower() in ["mattokaasif145@gmail.com", "admin@neurotwin.ai"] or "verified_user" in email.lower()
     user_display = "Admin" if is_admin else email.split('@')[0].capitalize()
     
     greeting_key = get_greeting_key()

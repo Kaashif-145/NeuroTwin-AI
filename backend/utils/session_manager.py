@@ -32,19 +32,5 @@ def end_persistent_session():
     if os.path.exists(SESSION_FILE):
         os.remove(SESSION_FILE)
 
-REMEMBER_FILE = os.path.join(os.path.dirname(__file__), "..", "..", "database", "remember_me.json")
 
-def save_remembered_user(email):
-    os.makedirs(os.path.dirname(REMEMBER_FILE), exist_ok=True)
-    with open(REMEMBER_FILE, "w") as f:
-        json.dump({"last_email": email}, f)
-
-def get_remembered_user():
-    if os.path.exists(REMEMBER_FILE):
-        try:
-            with open(REMEMBER_FILE, "r") as f:
-                data = json.load(f)
-                return data.get("last_email", "")
-        except:
-            return ""
-    return ""
+# End of file

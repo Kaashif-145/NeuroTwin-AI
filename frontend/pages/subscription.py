@@ -95,7 +95,7 @@ def show_subscription():
             <p>Perfect for starting your study journey.</p>
             <div class="payment-icons">📱 💳 🏦</div>
             <ul>
-                <li>✅ <b>20 Documents / Month</b></li>
+                <li>✅ <b>20 Documents / Day</b></li>
                 <li>✅ Detailed AI Explanations</li>
                 <li>✅ Cloudflare Optimized Delivery</li>
                 <li>✅ Exam Prep Glossary</li>
@@ -114,7 +114,7 @@ def show_subscription():
             <p>Full depth analysis for dedicated students.</p>
             <div class="payment-icons">💳 📱 🏦</div>
             <ul>
-                <li>✅ <b>90 Documents / Month</b></li>
+                <li>✅ <b>90 Documents / Day</b></li>
                 <li>✅ <b>Priority Cloudflare CDN</b></li>
                 <li>✅ Multi-Slide Concept Deep Dives</li>
                 <li>✅ Unlimited Knowledge Bases</li>
@@ -129,7 +129,7 @@ def show_subscription():
         <div class="pricing-card">
             <div class="cloudflare-badge" style="background: #a29bfe;">CF-ENTERPRISE</div>
             <h3>🤝 Master & Sponsor</h3>
-            <h2 style="color: #a29bfe;">₹299 <small>/year</small></h2>
+            <h2 style="color: #a29bfe;">₹299 <small>/month</small></h2>
             <p>Empower yourself & sponsor a peer.</p>
             <div class="payment-icons">🏦 💳 📱</div>
             <ul>
