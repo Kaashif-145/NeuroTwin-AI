@@ -279,13 +279,15 @@ def _render_results():
         if st.button(f"🎯 {_t('take_quiz')}", use_container_width=True, key="toolbox_quiz"):
             st.switch_page("pages/quiz_page.py")
 
-        if st.button("📝 Mock Exam (Long Form)", use_container_width=True, key="toolbox_exam"):
-            st.markdown("### 📝 Descriptive Exam Paper")
-            for item in st.session_state.get("descriptive_paper", []):
-                with st.expander(f"Q: {item['question']}"):
-                    st.info(f"**Answer Key:** {item['answer_key']}")
+        if st.button("📝 AI Exam Builder", use_container_width=True, key="toolbox_exam"):
+            st.switch_page("pages/exam_builder.py")
+
+        if st.button("📊 AI Deck Creator", use_container_width=True, key="toolbox_deck"):
+            st.switch_page("pages/presentation_creator.py")
 
         if st.button("🗺️ View Study Roadmap", use_container_width=True, key="toolbox_roadmap"):
+            # We can still keep simple expansion for roadmap if desired, 
+            # or move it to recommendations
             st.markdown("### 🗺️ 7-Day Study Roadmap")
             roadmap = st.session_state.get("study_plan", {}).get("roadmap", {})
             for day, topics_in_day in roadmap.items():

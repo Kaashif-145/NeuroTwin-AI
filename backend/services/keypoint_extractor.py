@@ -15,9 +15,9 @@ def extract_key_details(text):
     
     # Use LLM for intelligent extraction
     system_prompt = (
-        "You are an expert academic research assistant. Extract exactly 7-10 high-priority key details, "
+        "You are an expert academic research assistant. Extract exactly 7-10 high-priority key details in ENGLISH, "
         "fundamental facts, or critical insights from the following text. "
-        "Each detail should be a single, impactful sentence. "
+        "Each detail should be a single, impactful sentence in English. "
         "Avoid any OCR noise, file paths, or image placeholders. "
         "Return the details as a simple bulleted list with no introduction."
     )
@@ -54,8 +54,8 @@ def extract_actionable_insights(text):
     Extracts actionable study insights or 'takeaways'.
     """
     system_prompt = (
-        "Identify 3-5 actionable study takeaways or 'Must-Know' insights from this text. "
-        "Format as a list of short, punchy points."
+        "Identify 3-5 actionable study takeaways or 'Must-Know' insights from this text in ENGLISH. "
+        "Format as a list of short, punchy points in English."
     )
     try:
         context = text[:5000]

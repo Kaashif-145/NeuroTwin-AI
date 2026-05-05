@@ -382,7 +382,7 @@ if __name__ == "__main__":
     if 'authenticated' not in st.session_state:
         st.session_state.authenticated = False
     
-    set_page_config(title="Access - NeuroTwin AI", show_header=True)
+    set_page_config(title="Access - NeuroTwin AI", show_header=False)
     
     if st.session_state.authenticated:
         st.switch_page("pages/home.py")

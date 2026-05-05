@@ -180,34 +180,98 @@ def render_top_navigation():
 
     st.markdown("<hr style='margin-top: 0; margin-bottom: 25px; opacity: 0.1;'>", unsafe_allow_html=True)
     
-    # Navigation Links
-    nav_cols = st.columns([1, 1, 1, 1, 1, 1, 1, 1])
-    pages = {
-        "🏠 Home": "app.py",
-        "📂 Library": "pages/upload_page.py",
-        "📄 Resume Checker": "pages/cv_ats_checker.py",
-        "💻 Code Hub": "pages/code_hub.py",
-        "💬 Chat": "pages/chatbot.py",
-        "💎 Pricing": "pages/pricing.py"
+    # Navigation Links - Final Comprehensive Map
+    pages_links = {
+        "🏠 HOME": "pages/home.py",
+        "📂 LIBRARY": "pages/upload_page.py",
+        "📄 ROAST 🔥": "pages/cv_ats_checker.py",
+        "💻 CODE": "pages/code_hub.py",
+        "📝 EXAMS": "pages/exam_builder.py",
+        "📊 DECKS": "pages/presentation_creator.py",
+        "🧠 TWIN": "pages/digital_twin_dashboard.py",
+        "💬 CHAT": "pages/chat_assistant.py",
+        "🌍 TRANSLATE": "pages/translator_page.py",
+        "📈 PROGRESS": "pages/progress_tracking.py",
+        "💎 PLANS": "pages/subscription.py",
     }
     
-    # Custom CSS for the top nav buttons
+    # Custom CSS for the top nav buttons - High Fidelity Quantum Design
     st.markdown("""
         <style>
-        div[data-testid="column"] button {
-            background: transparent !important;
-            border: 1px solid rgba(255,255,255,0.1) !important;
-            border-radius: 12px !important;
-            font-size: 0.85rem !important;
-            transition: all 0.3s ease !important;
+        /* Force single line for the entire nav block */
+        [data-testid="stHorizontalBlock"] {
+            gap: 0.3rem !important;
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            padding-bottom: 10px !important;
         }
-        div[data-testid="column"] button:hover {
-            border-color: #6C5CE7 !important;
-            background: rgba(108, 92, 231, 0.1) !important;
-            box-shadow: 0 0 15px rgba(108, 92, 231, 0.2) !important;
+
+        .stButton > button {
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.1) 0%, rgba(0, 209, 255, 0.1) 100%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 10px !important;
+            color: #E0E0E0 !important;
+            font-size: 0.62rem !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.3px !important;
+            transition: all 0.3s ease !important;
+            height: 42px !important;
+            padding: 0 8px !important;
+            backdrop-filter: blur(8px) !important;
+            white-space: nowrap !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 100% !important;
+            animation: breathing-glow 3s infinite ease-in-out !important;
+        }
+        
+        /* The Eye-Catching Breathing Glow */
+        @keyframes breathing-glow {
+            0% { border-color: rgba(108, 92, 231, 0.2); box-shadow: 0 0 5px rgba(108, 92, 231, 0.1); }
+            50% { border-color: rgba(0, 209, 255, 0.5); box-shadow: 0 0 15px rgba(0, 209, 255, 0.2); }
+            100% { border-color: rgba(108, 92, 231, 0.2); box-shadow: 0 0 5px rgba(108, 92, 231, 0.1); }
+        }
+
+        .stButton > button:hover {
+            animation: none !important;
+            border-color: #00D1FF !important;
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.3) 0%, rgba(0, 209, 255, 0.3) 100%) !important;
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.5) !important;
+            transform: translateY(-2px) !important;
+            color: #FFFFFF !important;
+        }
+
+        /* Active State */
+        .stButton > button[kind="primary"] {
+            background: linear-gradient(135deg, #6C5CE7 0%, #00D1FF 100%) !important;
+            border: none !important;
+            box-shadow: 0 0 15px rgba(108, 92, 231, 0.6) !important;
+            color: white !important;
+        }
+
+        /* Hide Streamlit default button padding */
+        .stButton > button div p {
+            margin: 0 !important;
+            white-space: nowrap !important;
         }
         </style>
     """, unsafe_allow_html=True)
+
+    # Render Buttons in Columns
+    nav_cols = st.columns(len(pages_links))
+    for i, (label, path) in enumerate(pages_links.items()):
+        with nav_cols[i]:
+            # Simple check to highlight the 'Active' page
+            is_active = False
+            # Check if current path is in the button path
+            if path == "app.py" and st.session_state.get("auth_redirect") == "home":
+                is_active = True
+            
+            if st.button(label, key=f"top_nav_{i}", use_container_width=True, type="primary" if is_active else "secondary"):
+                st.switch_page(path)
+
+    st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
 
 
 def render_sidebar_settings():

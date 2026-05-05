@@ -59,6 +59,8 @@ def main():
             _t("nav_learning"): [
                 st.Page("pages/quiz_page.py", title=_t("nav_quiz"), icon="🎯"),
                 st.Page("pages/flashcard_ui.py", title=_t("nav_flashcards"), icon="🎴"),
+                st.Page("pages/exam_builder.py", title="📝 Exam Builder", icon="📝"),
+                st.Page("pages/presentation_creator.py", title="📊 Deck Creator", icon="📊"),
                 st.Page("pages/recommendation_page.py", title=_t("nav_recommendations"), icon="💡"),
                 st.Page("pages/progress_tracking.py", title=_t("nav_progress"), icon="📈"),
                 st.Page("pages/train_ui.py", title=_t("nav_optimize"), icon="🔋"),
@@ -69,7 +71,7 @@ def main():
             ]
         }
         
-        pg = st.navigation(pages, position="top")
+        pg = st.navigation(pages, position="hidden")
         
         with st.sidebar:
             st.markdown("---")

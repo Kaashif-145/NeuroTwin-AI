@@ -1,5 +1,4 @@
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-import torch
+# Heavy imports (torch, transformers) are now moved inside functions to prevent startup crashes.
 import random
 import re
 import os
@@ -10,13 +9,21 @@ from backend.utils.llm_client import get_chat_response
 # Model for Question Generation
 QG_MODEL = "mrm8488/t5-base-finetuned-question-generation-ap"
 
-try:
-    tokenizer = AutoTokenizer.from_pretrained(QG_MODEL)
-    model = AutoModelForSeq2SeqLM.from_pretrained(QG_MODEL)
-except Exception as e:
-    print(f"Error loading QG model: {e}")
-    tokenizer = None
-    model = None
+# We prioritize LLM (Ollama/Gemini) or rule-based fallback to save memory
+tokenizer = None
+model = None
+
+def _get_qg_model():
+    """Lazy loads the question generation model only if needed."""
+    global tokenizer, model
+    if tokenizer is None or model is None:
+        try:
+            from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+            tokenizer = AutoTokenizer.from_pretrained(QG_MODEL)
+            model = AutoModelForSeq2SeqLM.from_pretrained(QG_MODEL)
+        except Exception as e:
+            print(f"QG model load skipped: {e}")
+    return tokenizer, model
 
 def fallback_generate_quiz(text, sentences):
     """

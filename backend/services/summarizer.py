@@ -1,7 +1,6 @@
 import re
 
-import torch
-from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+# Heavy imports (torch, transformers) are now moved inside functions to prevent startup crashes.
 from backend.services.text_cleaner import clean_ocr_garbage, post_process_summary
 from backend.utils.llm_client import get_chat_response
 
@@ -14,13 +13,22 @@ MAX_SOURCE_CHARS = 12000
 CHUNK_SIZE = 2200
 CHUNK_OVERLAP = 250
 
-try:
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-    model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_NAME)
-except Exception as e:
-    print(f"Error loading model {MODEL_NAME}: {e}")
-    tokenizer = None
-    model = None
+# We now use lazy loading or Ollama/Gemini via llm_client to save memory
+tokenizer = None
+model = None
+
+def _get_local_model():
+    """Lazy loads the local model only if needed and if RAM is available."""
+    global tokenizer, model
+    if tokenizer is None or model is None:
+        try:
+            # Only attempt to load if explicitly requested or if LLM API fails
+            from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+            tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+            model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_NAME)
+        except Exception as e:
+            print(f"Local model load skipped/failed: {e}")
+    return tokenizer, model
 
 
 def clean_text_symbols(text):
@@ -133,21 +141,22 @@ def _split_into_chunks(text, chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
 def _generate_model_summary(text, max_length=150, min_length=50):
     # Try high-fidelity LLM first (OpenAI/Gemini)
     try:
-        prompt = f"Summarize the following academic text concisely (between {min_length} and {max_length} words). Focus on key concepts and definitions:\n\n{text}"
-        summary, provider = get_chat_response(prompt, system_prefix="You are a professional academic summarizer.")
+        prompt = f"Summarize the following academic text concisely in ENGLISH (between {min_length} and {max_length} words). Focus on key concepts and definitions:\n\n{text}"
+        summary, provider = get_chat_response(prompt, system_prefix="You are a professional academic summarizer. Always respond in English.")
         if summary and not summary.startswith("OpenAI Error") and not summary.startswith("Gemini Error"):
             return summary
     except:
         pass # Fall back to local model
 
-    # Fallback to local model
-    if tokenizer is None or model is None:
+    import torch
+    tk, md = _get_local_model()
+    if tk is None or md is None:
         return text[:max_length*5]
 
-    inputs = tokenizer([text], max_length=1024, return_tensors="pt", truncation=True)
+    inputs = tk([text], max_length=1024, return_tensors="pt", truncation=True)
 
     with torch.no_grad():
-        summary_ids = model.generate(
+        summary_ids = md.generate(
             inputs["input_ids"],
             num_beams=4,
             max_length=max_length,
@@ -157,7 +166,7 @@ def _generate_model_summary(text, max_length=150, min_length=50):
             early_stopping=True,
         )
 
-    return tokenizer.batch_decode(
+    return tk.batch_decode(
         summary_ids,
         skip_special_tokens=True,
         clean_up_tokenization_spaces=False,
@@ -225,8 +234,8 @@ def generate_summary(text):
     if not clean_text:
         return "Summarization service temporarily unavailable (empty source text)."
 
-    if not model or not tokenizer:
-        return "Summarization service temporarily unavailable (Model load error)."
+    # We prioritize the LLM client (Ollama/Gemini) over the local heavy model
+    # The _generate_model_summary function handles the fallback logic.
 
     clean_text = clean_text[:MAX_SOURCE_CHARS]
     chunks = _split_into_chunks(clean_text)
